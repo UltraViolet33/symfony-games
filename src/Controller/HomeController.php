@@ -66,12 +66,11 @@ class HomeController extends AbstractController
 
         // game does not already exist in db
         // get the details game from api
-        if(! $game)
-        {
+        if (!$game) {
             $game = $this->getGameFromApi($id, $client);
-            $entityManager->persist($game);    
+            $entityManager->persist($game);
         }
-        
+
         $user = $this->getUser();
 
         $user->addGame($game);
@@ -85,31 +84,31 @@ class HomeController extends AbstractController
     public function removeGameFromFavorite($id, EntityManagerInterface  $entityManager): Response
     {
         $game = $entityManager->getRepository(Game::class)->find($id);
+        // dd($gam)
 
         $user = $this->getUser();
         $user->removeGame($game);
-        
+
         $entityManager->flush();
-        
+
         return $this->redirectToRoute('user_games');
     }
 
-    
+
     #[Route('/details-game/{id}', name: 'details_game')]
     public function displayDetailsGame($id, EntityManagerInterface  $entityManager, HttpClientInterface $client): Response
     {
         // check if game already exists in db
-        $game = $entityManager->getRepository(Game::class)->findOneBy(['idRawgAPI' => $id]);
-        
-        
-        // game dont exists in db
-        if(! $game)
-        {
+        $game = $entityManager->getRepository(Game::class)->findOneBy(['id' => $id]);
+
+        // // game dont exists in db
+        if (!$game) {
             $game = $this->getGameFromApi($id, $client);
-            $entityManager->persist($game);    
+            dd($game);
+            $entityManager->persist($game);
         }
-        
-        
+
+
         // check if the user has already the game in his favorites
         $user = $this->getUser();
         $userHasGame = $user->hasGame($game);
@@ -162,7 +161,7 @@ class HomeController extends AbstractController
             $newGameObject->setImagePath($game["background_image"]);
 
             $newGameObject->setHasUser($user->hasGame($newGameObject));
-           
+
             $results[] = $newGameObject;
         }
 
