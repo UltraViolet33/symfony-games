@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Game;
 use App\Form\SearchFormType;
 use App\Form\SearchType;
+use App\Service\VideoGameApiService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,11 +16,15 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 #[IsGranted('ROLE_USER')]
 class GameController extends AbstractController
 {
+    public function __construct(private VideoGameApiService $videoGameApiService)
+    {
+    }
+
     #[Route('/', name: 'home')]
-    public function index(Request $request, HttpClientInterface $client): Response
+    public function index(Request $request, HttpClientInterface $client, VideoGameApiService $videoGameApiService): Response
     {
         $searchForm = $this->createForm(SearchFormType::class);
-     
+
         $searchForm->handleRequest($request);
 
         $gameResults = [];
@@ -34,22 +39,5 @@ class GameController extends AbstractController
     }
 
 
-    private function searchGames(string $game,  HttpClientInterface $client): array
-    {
-        $key = $this->getParameter('app.apikey');
-        $apiUrl = $this->getParameter('app.apiUrl');
-
-        $url = "$apiUrl?key=$key&search=$game";
-
-        $response = $client->request('GET', $url);
-        $parsedResponse = $response->toArray();
-
-        $results = [];
-
-        foreach ($parsedResponse['results'] as $game) {
-            $results[] = Game::create($game);
-        }
-
-        return $results;
-    }
+    
 }

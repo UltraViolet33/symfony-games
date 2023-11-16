@@ -33,8 +33,6 @@ class LoginController extends AbstractController
             'controller_name' => 'LoginController',
             'error'         => $error,
             'last_username' => $lastUsername,
-         
-
         ]);
     }
 

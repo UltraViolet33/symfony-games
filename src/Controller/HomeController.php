@@ -16,30 +16,30 @@ use Symfony\Component\HttpFoundation\Request;
 
 class HomeController extends AbstractController
 {
-    #[Route('/', name: 'app_home')]
-    public function index(Request $request, HttpClientInterface $client): Response
-    {
-        if ($this->isGranted('ROLE_USER') == false) {
-            return $this->redirectToRoute('app_login');
-        }
+    // #[Route('/', name: 'app_home')]
+    // public function index(Request $request, HttpClientInterface $client): Response
+    // {
+    //     if ($this->isGranted('ROLE_USER') == false) {
+    //         return $this->redirectToRoute('app_login');
+    //     }
 
-        $gameResults = [];
+    //     $gameResults = [];
 
-        $form = $this->createFormBuilder()
-            ->add('game', TextType::class)
-            ->add('submit', SubmitType::class)
-            ->getForm();
+    //     $form = $this->createFormBuilder()
+    //         ->add('game', TextType::class)
+    //         ->add('submit', SubmitType::class)
+    //         ->getForm();
 
-        $form->handleRequest($request);
+    //     $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $data = $form->getData();
-            $gameSearch = $data["game"];
-            $gameResults = $this->searchGames($gameSearch, $client);
-        }
+    //     if ($form->isSubmitted() && $form->isValid()) {
+    //         $data = $form->getData();
+    //         $gameSearch = $data["game"];
+    //         $gameResults = $this->searchGames($gameSearch, $client);
+    //     }
 
-        return $this->render('games/index.html.twig', ["form" => $form, "games" => $gameResults]);
-    }
+    //     return $this->render('games/index.html.twig', ["form" => $form, "games" => $gameResults]);
+    // }
 
 
     #[Route('/user-games', name: 'user_games')]
