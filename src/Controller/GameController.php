@@ -59,4 +59,11 @@ class GameController extends AbstractController
 
         return $this->redirectToRoute('user_games');
     }
-}
+
+    #[Route('/user-games', name: 'user_games')]
+    public function getFavoriteGame(): Response
+    {
+        $games =  $this->getUser()->getGames();
+        return $this->render('games/user_games.html.twig', ["games" => $games]);
+    }
+        }

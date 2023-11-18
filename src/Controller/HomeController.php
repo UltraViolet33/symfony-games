@@ -42,16 +42,16 @@ class HomeController extends AbstractController
     // }
 
 
-    #[Route('/user-games', name: 'user_games')]
-    public function getFavoriteGame(): Response
-    {
-        if ($this->isGranted('ROLE_USER') == false) {
-            return $this->redirectToRoute('app_login');
-        }
+    // #[Route('/user-games', name: 'user_games')]
+    // public function getFavoriteGame(): Response
+    // {
+    //     if ($this->isGranted('ROLE_USER') == false) {
+    //         return $this->redirectToRoute('app_login');
+    //     }
 
-        $games =  $this->getUser()->getGames();
-        return $this->render('games/user_games.html.twig', ["games" => $games]);
-    }
+    //     $games =  $this->getUser()->getGames();
+    //     return $this->render('games/user_games.html.twig', ["games" => $games]);
+    // }
 
 
     // #[Route('/add-game/{id}', name: 'add_game')]
