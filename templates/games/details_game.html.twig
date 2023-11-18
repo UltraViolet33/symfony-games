@@ -14,11 +14,7 @@
 					<p>{{game.description | raw}}</p>
 				{% endif %}
 
-				{% if userHasGame %}
-					<a href="{{path('remove_game_favorites',{id: game.id})}}" class="btn btn-primary">Remove from favorites</a>
-				{% else %}
-					<a href="/add-game/{{game.id}}" class="btn btn-primary">Add Favorite</a>
-				{% endif %}
+				<a href="{{path('add_game', {id:game.idRawgAPI})}}" class="btn btn-primary">Add Favorite</a>
 			</div>
 		</div>
 	</div>

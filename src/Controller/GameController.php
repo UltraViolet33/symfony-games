@@ -66,4 +66,33 @@ class GameController extends AbstractController
         $games =  $this->getUser()->getGames();
         return $this->render('games/user_games.html.twig', ["games" => $games]);
     }
+    
+
+    #[Route('/details-game/{id}', name: 'details_game_user_game')]
+    public function displayDetailsUserGame($id, EntityManagerInterface  $entityManager): Response
+    {
+        $game = $entityManager->getRepository(Game::class)->findOneBy(['id' => $id]);
+        return $this->render('games/details_user_game.html.twig', ["game" => $game]);
+    }
+
+
+    #[Route('/details-game/{id}', name: 'details_game')]
+    public function displayDetailsGame($id, EntityManagerInterface  $entityManager): Response
+    {
+        // check if game already exists in db
+        $game = $entityManager->getRepository(Game::class)->findOneBy(['idRawgAPI' => $id]);
+
+        // if game
+        // check if the user has the game
+        // redirect to details game user
+
+        // game dont exists in db
+        if (!$game) {
+            $game = $this->videoGameApiService->searchGameById($id);
+            $entityManager->persist($game);
+            $entityManager->flush();
         }
+
+        return $this->render('games/details.html.twig', ["game" => $game]);
+    }
+}

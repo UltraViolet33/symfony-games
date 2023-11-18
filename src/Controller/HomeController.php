@@ -95,26 +95,26 @@ class HomeController extends AbstractController
     }
 
 
-    #[Route('/details-game/{id}', name: 'details_game')]
-    public function displayDetailsGame($id, EntityManagerInterface  $entityManager, HttpClientInterface $client): Response
-    {
-        // check if game already exists in db
-        $game = $entityManager->getRepository(Game::class)->findOneBy(['id' => $id]);
+    // #[Route('/details-game/{id}', name: 'details_game')]
+    // public function displayDetailsGame($id, EntityManagerInterface  $entityManager, HttpClientInterface $client): Response
+    // {
+    //     // check if game already exists in db
+    //     $game = $entityManager->getRepository(Game::class)->findOneBy(['id' => $id]);
 
-        // // game dont exists in db
-        if (!$game) {
-            $game = $this->getGameFromApi($id, $client);
-            dd($game);
-            $entityManager->persist($game);
-        }
+    //     // // game dont exists in db
+    //     if (!$game) {
+    //         $game = $this->getGameFromApi($id, $client);
+    //         dd($game);
+    //         $entityManager->persist($game);
+    //     }
 
 
-        // check if the user has already the game in his favorites
-        $user = $this->getUser();
-        $userHasGame = $user->hasGame($game);
+    //     // check if the user has already the game in his favorites
+    //     $user = $this->getUser();
+    //     $userHasGame = $user->hasGame($game);
 
-        return $this->render('games/details.html.twig', ["game" => $game, "userHasGame" => $userHasGame]);
-    }
+    //     return $this->render('games/details.html.twig', ["game" => $game, "userHasGame" => $userHasGame]);
+    // }
 
 
 
