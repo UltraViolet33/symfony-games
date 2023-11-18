@@ -2,25 +2,28 @@
 
 namespace App\Service;
 
+use App\Entity\Game;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class VideoGameApiService
 {
     private $httpClient;
     private $apiRawgKey;
+    private $apiRawgBaseUrl;
 
-    public function __construct(HttpClientInterface $httpClient, string $apiRawgKey)
+    public function __construct(HttpClientInterface $httpClient, string $apiRawgKey, string $apiRawgBaseUrl)
     {
         $this->httpClient = $httpClient;
         $this->apiRawgKey = $apiRawgKey;
+        $this->apiRawgBaseUrl = $apiRawgBaseUrl;
     }
 
     public function searchGames(string $game): array
     {
         
-        $url = "$apiUrl?key=$key&search=$game";
+        $url = "$this->apiRawgBaseUrl?key=$this->apiRawgKey&search=$game";
 
-        $response = $client->request('GET', $url);
+        $response = $this->httpClient->request('GET', $url);
         $parsedResponse = $response->toArray();
 
         $results = [];

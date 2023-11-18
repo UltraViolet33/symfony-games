@@ -32,7 +32,7 @@ class GameController extends AbstractController
         if ($searchForm->isSubmitted() && $searchForm->isValid()) {
             $data = $searchForm->getData();
             $gameSearch = $data["search"];
-            $gameResults = $this->searchGames($gameSearch, $client);
+            $gameResults = $videoGameApiService->searchGames($gameSearch);
         }
 
         return $this->render('games/index.html.twig', ["form" => $searchForm, "games" => $gameResults]);
