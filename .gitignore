@@ -19,4 +19,4 @@
 .phpunit.result.cache
 ###< phpunit/phpunit ###
 
-/config/packages/parameters.yaml
+/config/packages/api_rawg_config.yaml
