@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Entity\Game;
+use DateTime;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class VideoGameApiService
@@ -35,10 +36,21 @@ class VideoGameApiService
         return $results;
     }
 
+     // get a single games from the api by its id
+     public function searchGameById(int $id): Game
+     {
+         $url = "$this->apiRawgBaseUrl/$id?key=$this->apiRawgKey";
+ 
+         $response = $this->httpClient->request('GET', $url);
 
-
-    public function test()
-    {
-        return $this->apiRawgKey;
-    }
+         $gameDetails = $response->toArray();
+         $newGameObject = new Game();
+         $newGameObject->setIdRawgAPI($gameDetails["id"]);
+         $newGameObject->setName($gameDetails["name"]);
+         $newGameObject->setImagePath($gameDetails["background_image"]);
+         $newGameObject->setReleased(new DateTime($gameDetails["released"]));
+         $newGameObject->setDescription($gameDetails["description"]);
+ 
+         return $newGameObject;
+     }
 }
