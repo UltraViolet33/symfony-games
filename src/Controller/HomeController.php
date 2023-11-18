@@ -54,30 +54,30 @@ class HomeController extends AbstractController
     }
 
 
-    #[Route('/add-game/{id}', name: 'add_game')]
-    public function addGame($id, HttpClientInterface $client, EntityManagerInterface  $entityManager): Response
-    {
-        if ($this->isGranted('ROLE_USER') == false) {
-            return $this->redirectToRoute('app_login');
-        }
+    // #[Route('/add-game/{id}', name: 'add_game')]
+    // public function addGame($id, HttpClientInterface $client, EntityManagerInterface  $entityManager): Response
+    // {
+    //     if ($this->isGranted('ROLE_USER') == false) {
+    //         return $this->redirectToRoute('app_login');
+    //     }
 
-        // check if game already exists in db
-        $game = $entityManager->getRepository(Game::class)->findOneBy(['idRawgAPI' => $id]);
+    //     // check if game already exists in db
+    //     $game = $entityManager->getRepository(Game::class)->findOneBy(['idRawgAPI' => $id]);
 
-        // game does not already exist in db
-        // get the details game from api
-        if (!$game) {
-            $game = $this->getGameFromApi($id, $client);
-            $entityManager->persist($game);
-        }
+    //     // game does not already exist in db
+    //     // get the details game from api
+    //     if (!$game) {
+    //         $game = $this->getGameFromApi($id, $client);
+    //         $entityManager->persist($game);
+    //     }
 
-        $user = $this->getUser();
+    //     $user = $this->getUser();
 
-        $user->addGame($game);
-        $entityManager->flush();
+    //     $user->addGame($game);
+    //     $entityManager->flush();
 
-        return $this->redirectToRoute('user_games');
-    }
+    //     return $this->redirectToRoute('user_games');
+    // }
 
 
     #[Route('/remove-game/{id}', name: 'remove_game_favorites')]

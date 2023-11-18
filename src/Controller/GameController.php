@@ -6,6 +6,7 @@ use App\Entity\Game;
 use App\Form\SearchFormType;
 use App\Form\SearchType;
 use App\Service\VideoGameApiService;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,7 +22,7 @@ class GameController extends AbstractController
     }
 
     #[Route('/', name: 'home')]
-    public function index(Request $request, HttpClientInterface $client, VideoGameApiService $videoGameApiService): Response
+    public function index(Request $request, HttpClientInterface $client): Response
     {
         $searchForm = $this->createForm(SearchFormType::class);
 
@@ -32,12 +33,30 @@ class GameController extends AbstractController
         if ($searchForm->isSubmitted() && $searchForm->isValid()) {
             $data = $searchForm->getData();
             $gameSearch = $data["search"];
-            $gameResults = $videoGameApiService->searchGames($gameSearch);
+            $gameResults = $this->videoGameApiService->searchGames($gameSearch);
         }
 
         return $this->render('games/index.html.twig', ["form" => $searchForm, "games" => $gameResults]);
     }
 
+    #[Route('/add-game/{id}', name: 'add_game')]
+    public function addGame($id, HttpClientInterface $client, EntityManagerInterface  $entityManager): Response
+    {
+        // check if game already exists in db
+        $game = $entityManager->getRepository(Game::class)->findOneBy(['idRawgAPI' => $id]);
 
-    
+        // game does not already exist in db
+        // get the details game from api
+        if (!$game) {
+            $game = $this->videoGameApiService->searchGameById($id, $client);
+            $entityManager->persist($game);
+        }
+
+        $user = $this->getUser();
+
+        $user->addGame($game);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('user_games');
+    }
 }
