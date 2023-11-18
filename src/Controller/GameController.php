@@ -95,4 +95,18 @@ class GameController extends AbstractController
 
         return $this->render('games/details.html.twig', ["game" => $game]);
     }
+
+
+    #[Route('/remove-game/{id}', name: 'remove_game_favorites')]
+    public function removeGameFromFavorite($id, EntityManagerInterface  $entityManager): Response
+    {
+        $game = $entityManager->getRepository(Game::class)->find($id);
+
+        $user = $this->getUser();
+        
+        $user->removeGame($game);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('user_games');
+    }
 }

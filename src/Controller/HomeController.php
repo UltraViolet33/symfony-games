@@ -80,19 +80,19 @@ class HomeController extends AbstractController
     // }
 
 
-    #[Route('/remove-game/{id}', name: 'remove_game_favorites')]
-    public function removeGameFromFavorite($id, EntityManagerInterface  $entityManager): Response
-    {
-        $game = $entityManager->getRepository(Game::class)->find($id);
-        // dd($gam)
+    // #[Route('/remove-game/{id}', name: 'remove_game_favorites')]
+    // public function removeGameFromFavorite($id, EntityManagerInterface  $entityManager): Response
+    // {
+    //     $game = $entityManager->getRepository(Game::class)->find($id);
+    //     // dd($gam)
 
-        $user = $this->getUser();
-        $user->removeGame($game);
+    //     $user = $this->getUser();
+    //     $user->removeGame($game);
 
-        $entityManager->flush();
+    //     $entityManager->flush();
 
-        return $this->redirectToRoute('user_games');
-    }
+    //     return $this->redirectToRoute('user_games');
+    // }
 
 
     // #[Route('/details-game/{id}', name: 'details_game')]
