@@ -68,7 +68,7 @@ class GameController extends AbstractController
     }
     
 
-    #[Route('/details-game/{id}', name: 'details_game_user_game')]
+    #[Route('/details-user-game/{id}', name: 'details_game_user_game')]
     public function displayDetailsUserGame($id, EntityManagerInterface  $entityManager): Response
     {
         $game = $entityManager->getRepository(Game::class)->findOneBy(['id' => $id]);
@@ -93,7 +93,7 @@ class GameController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->render('games/details.html.twig', ["game" => $game]);
+        return $this->render('games/details_game.html.twig', ["game" => $game]);
     }
 
 
