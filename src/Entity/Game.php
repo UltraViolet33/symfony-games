@@ -51,6 +51,20 @@ class Game
         $this->users = new ArrayCollection();
     }
 
+
+    public static function create(array $game): self
+    {
+        $newGameObject = new self();
+        $newGameObject->setIdRawgAPI($game["id"]);
+        $newGameObject->setName($game["name"]);
+        $newGameObject->setImagePath($game["background_image"]);
+        // $newGameObject->setHasUser($user->hasGame($newGameObject));
+
+        return $newGameObject;
+    }
+
+
+
     public function getHasUser()
     {
         return $this->hasUser;
@@ -62,8 +76,6 @@ class Game
         $this->hasUser = $hasUser;
     }
 
-
-    
 
     public function getId(): ?int
     {
