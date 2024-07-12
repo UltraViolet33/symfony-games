@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Game;
 use App\Form\SearchFormType;
-use App\Form\SearchType;
 use App\Service\VideoGameApiService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -25,11 +24,9 @@ class GameController extends AbstractController
     public function index(Request $request, HttpClientInterface $client): Response
     {
         $searchForm = $this->createForm(SearchFormType::class);
-
         $searchForm->handleRequest($request);
 
         $gameResults = [];
-
         if ($searchForm->isSubmitted() && $searchForm->isValid()) {
             $data = $searchForm->getData();
             $gameSearch = $data["search"];
@@ -42,21 +39,15 @@ class GameController extends AbstractController
     #[Route('/add-game/{id}', name: 'add_game')]
     public function addGame($id, HttpClientInterface $client, EntityManagerInterface  $entityManager): Response
     {
-        // check if game already exists in db
         $game = $entityManager->getRepository(Game::class)->findOneBy(['idRawgAPI' => $id]);
-
-        // game does not already exist in db
-        // get the details game from api
         if (!$game) {
             $game = $this->videoGameApiService->searchGameById($id, $client);
             $entityManager->persist($game);
         }
 
         $user = $this->getUser();
-
         $user->addGame($game);
         $entityManager->flush();
-
         return $this->redirectToRoute('user_games');
     }
 
@@ -79,14 +70,7 @@ class GameController extends AbstractController
     #[Route('/details-game/{id}', name: 'details_game')]
     public function displayDetailsGame($id, EntityManagerInterface  $entityManager): Response
     {
-        // check if game already exists in db
         $game = $entityManager->getRepository(Game::class)->findOneBy(['idRawgAPI' => $id]);
-
-        // if game
-        // check if the user has the game
-        // redirect to details game user
-
-        // game dont exists in db
         if (!$game) {
             $game = $this->videoGameApiService->searchGameById($id);
             $entityManager->persist($game);
@@ -101,12 +85,9 @@ class GameController extends AbstractController
     public function removeGameFromFavorite($id, EntityManagerInterface  $entityManager): Response
     {
         $game = $entityManager->getRepository(Game::class)->find($id);
-
         $user = $this->getUser();
-        
         $user->removeGame($game);
         $entityManager->flush();
-
         return $this->redirectToRoute('user_games');
     }
 }

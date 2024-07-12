@@ -58,8 +58,6 @@ class Game
         $newGameObject->setIdRawgAPI($game["id"]);
         $newGameObject->setName($game["name"]);
         $newGameObject->setImagePath($game["background_image"]);
-        // $newGameObject->setHasUser($user->hasGame($newGameObject));
-
         return $newGameObject;
     }
 

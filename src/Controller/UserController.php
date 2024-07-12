@@ -17,11 +17,9 @@ class UserController extends AbstractController
     public function index(Request $request): Response
     {
         $user = $this->getUser();
-
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
-        // edit the user data
         if($form->isSubmitted() && $form->isValid())
         {
             $data = $form->getData();
@@ -30,12 +28,9 @@ class UserController extends AbstractController
 
         $formEditPassword = $this->createForm(EditPasswordType::class);
         $formEditPassword->handleRequest($request);
-
         if($formEditPassword->isSubmitted() && $formEditPassword->isValid())
         {
             $data = $formEditPassword->getData();
-            // $user->setEmail($data->getEmail());
-            dd($data);
         }
 
         return $this->render('user/index.html.twig', [
